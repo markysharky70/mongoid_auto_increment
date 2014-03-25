@@ -5,7 +5,11 @@ module MongoidAutoIncrement
 
   module ClassMethods
     def auto_increment(name, options={})
-      field name, :type => Integer
+      if options[:as].present?
+        field name, :as => options[:as], :type => Integer
+      else
+        field name, :type => Integer
+      end
       seq_name = "#{self.name.downcase}_#{name}"
       @@incrementor = MongoidAutoIncrement::Incrementor.new unless defined? @@incrementor
 
